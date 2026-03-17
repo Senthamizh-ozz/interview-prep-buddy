@@ -13,23 +13,23 @@ Deno.serve(async (req) => {
 
   try {
     const { messages } = await req.json();
-    const openaiKey = Deno.env.get("OPENAI_API_KEY");
+    const apiKey = Deno.env.get("LOVABLE_API_KEY");
 
-    if (!openaiKey) {
+    if (!apiKey) {
       return new Response(
-        JSON.stringify({ error: "OpenAI API key not configured" }),
+        JSON.stringify({ error: "AI API key not configured" }),
         { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+    const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${openaiKey}`,
+        Authorization: `Bearer ${apiKey}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "gpt-4o-mini",
+        model: "google/gemini-3-flash-preview",
         messages,
         temperature: 0.7,
         max_tokens: 800,
@@ -39,7 +39,7 @@ Deno.serve(async (req) => {
     const data = await response.json();
 
     if (!response.ok) {
-      throw new Error(data.error?.message || "OpenAI API error");
+      throw new Error(data.error?.message || "AI API error");
     }
 
     const reply = data.choices[0].message.content;

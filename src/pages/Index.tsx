@@ -1,16 +1,23 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import DomainSelect from "@/components/DomainSelect";
+import InterviewChat from "@/components/InterviewChat";
+import { useInterview } from "@/hooks/use-interview";
 
-// IMPORTANT: Fully REPLACE this with your own code
-const PlaceholderIndex = () => {
-  // PLACEHOLDER: Replace this entire return statement with the user's app.
-  // The inline background color is intentionally not part of the design system.
+const Index = () => {
+  const { domain, messages, isLoading, startInterview, sendMessage, reset } = useInterview();
+
+  if (!domain) {
+    return <DomainSelect onSelect={startInterview} />;
+  }
+
   return (
-    <div className="flex min-h-screen items-center justify-center" style={{ backgroundColor: '#fcfbf8' }}>
-      <img data-lovable-blank-page-placeholder="REMOVE_THIS" src="/placeholder.svg" alt="Your app will live here!" />
-    </div>
+    <InterviewChat
+      domain={domain}
+      messages={messages}
+      isLoading={isLoading}
+      onSend={sendMessage}
+      onBack={reset}
+    />
   );
 };
-
-const Index = PlaceholderIndex;
 
 export default Index;
